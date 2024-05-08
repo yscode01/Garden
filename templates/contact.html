@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Contact</title>
+    <title>Gardening Blog - Contact</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -17,31 +17,8 @@
     </header>
 
     <main>
-        <h1>Contact Me</h1>
-
-        {% if success_message %}
-        <div class="success-message">{{ success_message }}</div>
-        {% endif %}
-
-        {% if error_message %}
-        <div class="error-message">{{ error_message }}</div>
-        {% endif %}
-
-        <form id="contact-form" action="{{ url_for('send_message') }}" method="POST">
-            <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit">Send Message</button>
-        </form>
+        <h1>Contact</h1>
+        <p>The contact page is currently under construction. Please check back soon.</p>
     </main>
 
     <footer>
