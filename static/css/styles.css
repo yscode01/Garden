@@ -1,4 +1,27 @@
-body {
-    background-color: #485240;
-    color: #FFF;
-  }
+body, ul {
+    margin: 0;
+    padding: 0;
+    background-color: #FCFBF7;
+    color: #485240;
+}
+
+header {
+  background-color: #FCFBF7;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav a {
+  color: #485240;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #B9BBB2;
+}
