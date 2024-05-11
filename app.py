@@ -1,6 +1,9 @@
 from flask import Flask, render_template
+from models import db, Post
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+db.init_app(app)
 
 @app.route('/')
 def home():
