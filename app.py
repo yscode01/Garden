@@ -1,9 +1,14 @@
-from flask import Flask, render_template
-from models import db, Post
+from flask import Flask
+from models import db, Post, Category
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 db.init_app(app)
+
+@app.shell_context_processor
+def make_shell_context():
+    return dict(app=app, db=db, Post=Post, Category=Category)
 
 @app.route('/')
 def home():
