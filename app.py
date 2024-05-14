@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Post, Category
 import os
 
@@ -49,6 +49,32 @@ def resources():
 @app.route('/search')
 def search():
     return render_template('search.html')
+
+@app.route('/create-post', methods=['GET', 'POST'])
+def create_post():
+    if request.method == 'POST':
+        # Get form data
+        title = request.form['title']
+        content = request.form['content']
+        author = request.form['author']
+        category_id = request.form['category']
+        tags = request.form['tags']
+        featured_image = request.form['featured_image']
+
+        # Create new post instance
+        new_post = Post(title=title, content=content, author=author,
+                        category_id=category_id, tags=tags,
+                        featured_image=featured_image)
+
+        # Add post to database
+        db.session.add(new_post)
+        db.session.commit()
+
+        flash('Post created successfully!', 'success')
+        return redirect(url_for('home'))
+
+    categories = Category.query.all()
+    return render_template('create_post.html', categories=categories)
 
 if __name__ == '__main__':
     app.run(debug=True)
