@@ -1,10 +1,13 @@
+/* General Styles */
 body, ul {
-    margin: 0;
-    padding: 0;
-    background-color: #FCFBF7;
-    color: #485240;
+  margin: 0;
+  padding: 0;
+  background-color: #FCFBF7;
+  color: #485240;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Header Styles */
 header {
   background-color: #FCFBF7;
   padding: 10px;
@@ -26,10 +29,32 @@ nav a:hover {
   color: #B9BBB2;
 }
 
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: #757575;
+}
+
 input, textarea, select {
+  display: block;
+  width: 100%;
   padding: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #212121;
+  background-color: transparent;
   border: 1px solid #ccc;
   border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #6b9c51;
 }
 
 button {
@@ -38,12 +63,14 @@ button {
   padding: 0.5rem 1rem;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 button:hover {
   background-color: #507a3e;
 }
 
+/* Layout Styles */
 main {
   max-width: 800px;
   margin: 0 auto;

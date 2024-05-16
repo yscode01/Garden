@@ -3,51 +3,51 @@
 <head>
     <title>Gardening Blog - Create Post</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('blog') }}">Blog</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
-        </nav>
+        <!-- Navigation -->
     </header>
 
     <main>
         <h1>Create a New Post</h1>
         <form method="post" action="{{ url_for('create_post') }}">
-            <div>
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required>
+            <div class="form-group">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" required>
             </div>
-            <div>
-                <label for="content">Content:</label>
-                <textarea id="content" name="content" required></textarea>
+
+            <div class="form-group">
+                <label for="content" class="form-label">Content</label>
+                <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
             </div>
-            <div>
-                <label for="author">Author:</label>
-                <input type="text" id="author" name="author" required>
+
+            <div class="form-group">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" id="author" name="author" class="form-control" required>
             </div>
-            <div>
-                <label for="category">Category:</label>
-                <select id="category" name="category" required>
+
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" name="category" class="form-control" required>
                     {% for category in categories %}
                     <option value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div>
-                <label for="tags">Tags (comma-separated):</label>
-                <input type="text" id="tags" name="tags">
+
+            <div class="form-group">
+                <label for="tags" class="form-label">Tags (comma-separated)</label>
+                <input type="text" id="tags" name="tags" class="form-control">
             </div>
-            <div>
-                <label for="featured_image">Featured Image URL:</label>
-                <input type="text" id="featured_image" name="featured_image">
+
+            <div class="form-group">
+                <label for="featured_image" class="form-label">Featured Image URL</label>
+                <input type="text" id="featured_image" name="featured_image" class="form-control">
             </div>
-            <button type="submit">Create Post</button>
+
+            <button type="submit" class="btn btn-primary">Create Post</button>
         </form>
     </main>
 
