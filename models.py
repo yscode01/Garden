@@ -14,6 +14,7 @@ class Post(db.Model):
     featured_image = db.Column(db.String(200))
     status = db.Column(db.String(20), nullable=False, default='draft')
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    slug = db.Column(db.String(100), unique=True, nullable=False)  # Slug field
 
     def __repr__(self):
         return f'<Post {self.title}>'

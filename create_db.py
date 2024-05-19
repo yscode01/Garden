@@ -1,9 +1,7 @@
 from app import app, db
-from models import Post, Category, Comment
+from models import Category
 
 with app.app_context():
-    db.create_all()
-
     # Add categories
     categories = [
         'Vegetables',

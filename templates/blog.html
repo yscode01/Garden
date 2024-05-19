@@ -24,14 +24,15 @@
             {% for post in posts %}
             <article class="blog-post">
                 <h2><a href="{{ url_for('post', post_slug=post.slug) }}">{{ post.title }}</a></h2>
-                <p>{{ post.excerpt }}</p>
-                <p>Posted on {{ post.date }}</p>
+                <p>{{ post.content[:100] }}...</p>
+                <p>Posted on {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
             </article>
             {% endfor %}
         </div>
         {% else %}
         <p>No blog posts available yet.</p>
         {% endif %}
+
     </main>
 
     <footer>
