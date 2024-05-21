@@ -20,43 +20,35 @@
 
     <main>
         <h1>Create a New Post</h1>
-        <form method="post" action="{{ url_for('create_post') }}">
-            <div class="form-group">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" id="title" name="title" class="form-control" required>
-            </div>
+        <form method="POST" action="{{ url_for('create_post') }}">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required><br>
 
-            <div class="form-group">
-                <label for="content" class="form-label">Content</label>
-                <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
-            </div>
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" required></textarea><br>
 
-            <div class="form-group">
-                <label for="author" class="form-label">Author</label>
-                <input type="text" id="author" name="author" class="form-control" required>
-            </div>
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" required><br>
 
-            <div class="form-group">
-                <label for="category" class="form-label">Category</label>
-                <select id="category" name="category" class="form-control" required>
-                    {% for category in categories %}
+            <label for="category">Category:</label>
+            <select id="category" name="category" required>
+                {% for category in categories %}
                     <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                {% endfor %}
+            </select><br>
 
-            <div class="form-group">
-                <label for="tags" class="form-label">Tags (comma-separated)</label>
-                <input type="text" id="tags" name="tags" class="form-control">
-            </div>
+            <label for="tags">Tags:</label>
+            <input type="text" id="tags" name="tags"><br>
 
-            <div class="form-group">
-                <label for="featured_image" class="form-label">Featured Image URL</label>
-                <input type="text" id="featured_image" name="featured_image" class="form-control">
-            </div>
+            <label for="featured_image">Featured Image URL:</label>
+            <input type="text" id="featured_image" name="featured_image"><br>
 
-            <button type="submit" class="btn btn-primary">Create Post</button>
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" required><br>
+
+            <input type="submit" value="Submit">
         </form>
+
     </main>
 
     <footer>

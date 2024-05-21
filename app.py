@@ -5,6 +5,7 @@ import os
 import logging
 from slugify import slugify
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SECRET_KEY'] = os.urandom(24)  # Generates a random secret key
@@ -77,34 +78,34 @@ def search():
 @app.route('/create-post', methods=['GET', 'POST'])
 def create_post():
     if request.method == 'POST':
-        # Get form data
         title = request.form['title']
         content = request.form['content']
         author = request.form['author']
         category_id = request.form['category']
-        tags = request.form['tags']
-        featured_image = request.form['featured_image']
+        tags = request.form.get('tags', '')  # Provide default empty string if not found
+        featured_image = request.form.get('featured_image', '')  # Provide default empty string if not found
+        status = request.form.get('status', 'draft')  # Default status to 'draft' if not found
 
-        # Create new post instance
-        new_post = Post(
+        # Generate slug from title
+        slug = slugify(title)
+
+        post = Post(
             title=title,
             content=content,
             author=author,
             category_id=category_id,
             tags=tags,
             featured_image=featured_image,
-            slug=slugify(title)  # Generate slug from title
+            status=status,
+            slug=slug
         )
-
-        # Add post to database
-        db.session.add(new_post)
+        db.session.add(post)
         db.session.commit()
-
-        flash('Post created successfully!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('blog'))
 
     categories = Category.query.all()
     return render_template('create_post.html', categories=categories)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
