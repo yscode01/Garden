@@ -106,6 +106,30 @@ def create_post():
     categories = Category.query.all()
     return render_template('create_post.html', categories=categories)
 
+@app.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        post.category_id = request.form['category_id']
+        post.tags = request.form['tags']
+        post.featured_image = request.form['featured_image']
+        post.status = request.form['status']
+        db.session.commit()
+        return redirect(url_for('post', post_slug=post.slug))
+    categories = Category.query.all()
+    return render_template('edit_post.html', post=post, categories=categories)
+
+@app.route('/blog/delete/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('blog'))
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
