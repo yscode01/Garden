@@ -97,3 +97,32 @@ form div {
 .btn:hover {
   background-color: #507a3e;
 }
+
+/* Post Styles */
+
+.post-content {
+  line-height: 1.6;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.post-content h2, .post-content h3, .post-content h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.post-content p {
+  margin-bottom: 15px;
+}
+
+.post-content ul, .post-content ol {
+  margin-bottom: 15px;
+  padding-left: 20px;
+}
