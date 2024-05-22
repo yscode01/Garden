@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }} - Gardening Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('blog') }}">Blog</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>{{ post.title }}</h1>
+        <p><strong>Author:</strong> {{ post.author }}</p>
+        <p><strong>Posted on:</strong> {{ post.date_posted.strftime('%B %d, %Y') }}</p>
+        <p><strong>Category:</strong> {{ post.category.name }}</p>
+        <div>
+            <img src="{{ post.featured_image }}" alt="Featured Image" style="max-width: 100%;">
+        </div>
+        <div>
+            {{ post.content | safe }}
+        </div>
+        <p><strong>Tags:</strong> {{ post.tags }}</p>
+        <p><strong>Status:</strong> {{ post.status }}</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
