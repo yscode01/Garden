@@ -23,7 +23,7 @@
         <p><strong>Category:</strong> {{ post.category.name }}</p>
         <div>
             {% if post.featured_image %}
-                <img src="{{ url_for('static', filename='images/' + post.featured_image) }}" alt="Featured Image" style="max-width: 100%;">
+                <img src="{{ post.featured_image }}" alt="Featured Image" style="max-width: 100%;">
             {% endif %}
         </div>
         <div class="post-content">
