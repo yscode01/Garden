@@ -4,7 +4,6 @@ body, ul {
   padding: 0;
   background-color: #FCFBF7;
   color: #485240;
-  font-family: 'Roboto', sans-serif;
 }
 
 /* Header Styles */
@@ -125,4 +124,15 @@ form div {
 .post-content ul, .post-content ol {
   margin-bottom: 15px;
   padding-left: 20px;
+}
+
+/* Fonts */
+
+@font-face {
+  font-family: 'Eina';
+  src: url('/static/fonts/Eina01-Bold.ttf') format('truetype');
+}
+
+nav {
+  font-family: 'Eina', Arial, sans-serif !important;
 }
