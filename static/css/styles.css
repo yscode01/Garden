@@ -133,6 +133,28 @@ form div {
   src: url('/static/fonts/Eina01-Bold.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'TT';
+  src: url('/static/fonts/TT\ Commons\ Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Linotype';
+  src: url('/static/fonts/Linotype\ Didot\ Roman.otf') format('opentype');
+}
+
 nav {
   font-family: 'Eina', Arial, sans-serif !important;
+}
+
+h1 {
+  font-family: 'Eina', sans-serif !important;
+}
+
+.blog-post h2 a {
+  font-family: 'Linotype', sans-serif;
+}
+
+p {
+  font-family: 'TT', sans-serif;
 }
