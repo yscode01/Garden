@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 import os
 import logging
 from slugify import slugify
+from forms import SearchForm
 
 
 app = Flask(__name__)
@@ -127,6 +128,36 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('blog'))
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        keywords = form.keywords.data
+        category = form.category.data
+        author = form.author.data
+        tags = form.tags.data
+
+        query = Post.query
+
+        if keywords:
+            search = f"%{keywords}%"
+            query = query.filter((Post.title.ilike(search)) | (Post.content.ilike(search)))
+
+        if category:
+            query = query.join(Category).filter(Category.name.ilike(f"%{category}%"))
+
+        if author:
+            query = query.filter(Post.author.ilike(f"%{author}%"))
+
+        if tags:
+            search_tags = f"%{tags}%"
+            query = query.filter(Post.tags.ilike(search_tags))
+
+        results = query.all()
+        return render_template('search_results.html', form=form, results=results)
+
+    return render_template('search.html', form=form)
 
 
 
