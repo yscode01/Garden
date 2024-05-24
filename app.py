@@ -71,11 +71,6 @@ def resources():
     app.logger.debug('Resources page accessed')
     return render_template('resources.html')
 
-@app.route('/search')
-def search():
-    app.logger.debug('Search page accessed')
-    return render_template('search.html')
-
 @app.route('/create-post', methods=['GET', 'POST'])
 def create_post():
     if request.method == 'POST':

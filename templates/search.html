@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gardening Blog - Search</title>
+    <title>Search Posts</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -12,40 +12,38 @@
                 <li><a href="{{ url_for('blog') }}">Blog</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                <li><a href="{{ url_for('search') }}">Search</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <h1>Search</h1>
-
-        <div class="search-container">
-            <form action="{{ url_for('search_results') }}" method="GET">
-                <input type="text" name="query" placeholder="Search blog posts..." required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
-
-        {% if search_results %}
-        <div class="search-results">
-            <h2>Search Results</h2>
-            {% for result in search_results %}
-            <article class="search-result">
-                <h3><a href="{{ url_for('post', post_slug=result.slug) }}">{{ result.title }}</a></h3>
-                <p>{{ result.excerpt }}</p>
-            </article>
-            {% endfor %}
-        </div>
-        {% elif query %}
-        <p>No results found for "{{ query }}".</p>
-        {% endif %}
+        <h1>Search Posts</h1>
+        <form method="POST" action="{{ url_for('search') }}">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.keywords.label }}<br>
+                {{ form.keywords(size=50) }}
+            </div>
+            <div>
+                {{ form.category.label }}<br>
+                {{ form.category(size=50) }}
+            </div>
+            <div>
+                {{ form.author.label }}<br>
+                {{ form.author(size=50) }}
+            </div>
+            <div>
+                {{ form.tags.label }}<br>
+                {{ form.tags(size=50) }}
+            </div>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
     </main>
 
     <footer>
         <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
     </footer>
-
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('blog') }}">Blog</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Search Results</h1>
+        {% if results %}
+            <ul>
+            {% for post in results %}
+                <li>
+                    <h2><a href="{{ url_for('post', post_slug=post.slug) }}">{{ post.title }}</a></h2>
+                    <p><strong>Author:</strong> {{ post.author }}</p>
+                    <p><strong>Category:</strong> {{ post.category.name }}</p>
+                    <p><strong>Tags:</strong> {{ post.tags }}</p>
+                    <p>{{ post.content[:150] | safe }}...</p>
+                    <p><strong>Posted on:</strong> {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No posts found matching your search criteria.</p>
+        {% endif %}
+        <a href="{{ url_for('search') }}">Back to Search</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
+    </footer>
+</body>
+</html>
