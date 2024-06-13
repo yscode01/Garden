@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, abort
 from models import db, User, Post, Category, Comment, Tag
+from datetime import datetime
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 import os
@@ -84,27 +85,26 @@ def resources():
     return render_template('resources.html')
 
 @app.route('/create-post', methods=['GET', 'POST'])
-@login_required
 def create_post():
-    if not current_user.is_admin:
-        abort(403)
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(
+        tags = form.tags.data.split(',')  # Convert comma-separated string to a list
+        new_post = Post(
             title=form.title.data,
             content=form.content.data,
-            author=current_user.username,
+            author='admin',  # This should be replaced with the current logged-in user
+            date_posted=datetime.utcnow(),
             category_id=form.category.data,
-            tags=form.tags.data,
             featured_image=form.featured_image.data,
             status=form.status.data,
-            slug=slugify(form.title.data)
+            slug=form.title.data.lower().replace(' ', '-'),  # Simple slug generation, improve as needed
+            tags=','.join(tags)  # Store the tags as a comma-separated string
         )
-        db.session.add(post)
+        db.session.add(new_post)
         db.session.commit()
-        flash('Post created successfully!', 'success')
-        return redirect(url_for('blog'))
-    return render_template('admin/create_post.html', form=form, categories=Category.query.all())
+        flash('Post created successfully', 'success')
+        return redirect(url_for('home'))
+    return render_template('admin/create_post.html', form=form)
 
 @app.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required

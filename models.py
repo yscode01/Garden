@@ -3,6 +3,8 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import String
 
 db = SQLAlchemy()
 
@@ -38,10 +40,12 @@ class Post(db.Model):
     status = db.Column(db.String(20), nullable=False, default='draft')
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
     slug = db.Column(db.String(100), unique=True, nullable=False)
-    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+    tags = db.Column(db.String, nullable=False)  # Using string for tags
 
     def __repr__(self):
         return f'<Post {self.title}>'
+
+
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)

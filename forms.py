@@ -22,6 +22,7 @@ class PostForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.category.choices = [(c.id, c.name) for c in Category.query.all()]
 
+
 class CategoryForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Create')
