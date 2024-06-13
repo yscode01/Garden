@@ -1,0 +1,7 @@
+{% for post in posts %}
+<article class="blog-post">
+    <h2><a href="{{ url_for('post', post_slug=post.slug) }}">{{ post.title }}</a></h2>
+    <p>{{ post.content[:150] | safe }}...</p>
+    <p>Posted on {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+</article>
+{% endfor %}

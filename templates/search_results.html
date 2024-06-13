@@ -1,45 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">HOME</a></li>
-                <li><a href="{{ url_for('blog') }}">BLOG</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('search') }}">SEARCH</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <h1>Search Results</h1>
-        {% if results %}
-            <ul>
-            {% for post in results %}
-                <li>
-                    <h2><a href="{{ url_for('post', post_slug=post.slug) }}">{{ post.title }}</a></h2>
-                    <p><strong>Author:</strong> {{ post.author }}</p>
-                    <p><strong>Category:</strong> {{ post.category.name }}</p>
-                    <p><strong>Tags:</strong> {{ post.tags }}</p>
-                    <p>{{ post.content[:150] | safe }}...</p>
-                    <p><strong>Posted on:</strong> {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No posts found matching your search criteria.</p>
-        {% endif %}
-        <a href="{{ url_for('search') }}">Back to Search</a>
-    </main>
+{% block title %}Search Results - Gardening Blog{% endblock %}
 
-    <footer>
-        <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+{% block content %}
+<h1>Search Results</h1>
+
+{% if results %}
+<div class="blog-posts">
+    {% set posts = results %}
+    {% include '_post_snippet.html' %}
+</div>
+{% else %}
+<p>No posts found matching your criteria.</p>
+{% endif %}
+{% endblock %}

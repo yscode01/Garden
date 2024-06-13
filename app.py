@@ -137,7 +137,7 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         keywords = form.keywords.data
-        category = form.category.data
+        category_id = form.category.data
         author = form.author.data
         tags = form.tags.data
 
@@ -147,15 +147,16 @@ def search():
             search = f"%{keywords}%"
             query = query.filter((Post.title.ilike(search)) | (Post.content.ilike(search)))
 
-        if category:
-            query = query.join(Category).filter(Category.name.ilike(f"%{category}%"))
+        if category_id:
+            query = query.filter_by(category_id=category_id)
 
         if author:
             query = query.filter(Post.author.ilike(f"%{author}%"))
 
         if tags:
-            search_tags = f"%{tags}%"
-            query = query.filter(Post.tags.ilike(search_tags))
+            search_tags = tags.split(',')
+            for tag in search_tags:
+                query = query.filter(Post.tags.ilike(f"%{tag.strip()}%"))
 
         results = query.all()
         return render_template('search_results.html', form=form, results=results)

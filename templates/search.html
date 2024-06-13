@@ -14,6 +14,27 @@
         {% endfor %}
     </div>
     <div>
+        {{ form.category.label }}<br>
+        {{ form.category() }}<br>
+        {% for error in form.category.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.author.label }}<br>
+        {{ form.author(size=32) }}<br>
+        {% for error in form.author.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.tags.label }}<br>
+        {{ form.tags(size=32) }}<br>
+        {% for error in form.tags.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
         {{ form.submit() }}
     </div>
 </form>
