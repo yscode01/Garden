@@ -1,22 +1,34 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from models import db, Post, Category
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
+from models import db, User, Post, Category, Comment, Tag
 from flask_migrate import Migrate
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 import os
 import logging
 from slugify import slugify
-from forms import SearchForm
-
+from forms import LoginForm, PostForm, CategoryForm, SearchForm
+from flask_ckeditor import CKEditor
 
 app = Flask(__name__)
+ckeditor = CKEditor(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SECRET_KEY'] = os.urandom(24)  # Generates a random secret key
+app.config['SECRET_KEY'] = os.urandom(24)
 app.config['DEBUG'] = True
+app.config['CKEDITOR_PKG_TYPE'] = 'full'
+
 
 db.init_app(app)
-migrate = Migrate(app, db)  # Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.shell_context_processor
 def make_shell_context():
@@ -72,56 +84,52 @@ def resources():
     return render_template('resources.html')
 
 @app.route('/create-post', methods=['GET', 'POST'])
+@login_required
 def create_post():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-        author = request.form['author']
-        category_id = request.form['category']
-        tags = request.form.get('tags', '')  # Provide default empty string if not found
-        featured_image = request.form.get('featured_image', '')  # Provide default empty string if not found
-        status = request.form.get('status', 'draft')  # Default status to 'draft' if not found
-
-        # Generate slug from title
-        slug = slugify(title)
-
+    if not current_user.is_admin:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
         post = Post(
-            title=title,
-            content=content,
-            author=author,
-            category_id=category_id,
-            tags=tags,
-            featured_image=featured_image,
-            status=status,
-            slug=slug
+            title=form.title.data,
+            content=form.content.data,
+            author=current_user.username,
+            category_id=form.category.data,
+            tags=form.tags.data,
+            featured_image=form.featured_image.data,
+            status=form.status.data,
+            slug=slugify(form.title.data)
         )
         db.session.add(post)
         db.session.commit()
+        flash('Post created successfully!', 'success')
         return redirect(url_for('blog'))
-
-    categories = Category.query.all()
-    return render_template('create_post.html', categories=categories)
+    return render_template('admin/create_post.html', form=form, categories=Category.query.all())
 
 @app.route('/blog/edit/<int:post_id>', methods=['GET', 'POST'])
+@login_required
 def edit_post(post_id):
+    if not current_user.is_admin:
+        abort(403)
     post = Post.query.get_or_404(post_id)
-    if request.method == 'POST':
-        post.title = request.form['title']
-        post.content = request.form['content']
-        post.category_id = request.form['category_id']
-        post.tags = request.form['tags']
-        post.featured_image = request.form['featured_image']
-        post.status = request.form['status']
+    form = PostForm(obj=post)
+    if form.validate_on_submit():
+        form.populate_obj(post)
+        post.slug = slugify(post.title)
         db.session.commit()
+        flash('Post updated successfully!', 'success')
         return redirect(url_for('post', post_slug=post.slug))
-    categories = Category.query.all()
-    return render_template('edit_post.html', post=post, categories=categories)
+    return render_template('admin/edit_post.html', form=form, post=post)
 
 @app.route('/blog/delete/<int:post_id>', methods=['POST'])
+@login_required
 def delete_post(post_id):
+    if not current_user.is_admin:
+        abort(403)
     post = Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
+    flash('Post deleted successfully.', 'info')
     return redirect(url_for('blog'))
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -154,7 +162,108 @@ def search():
 
     return render_template('search.html', form=form)
 
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    if not current_user.is_admin:
+        abort(403)  # Forbidden
 
+    form = CategoryForm()
+    categories = Category.query.all()
+    posts = Post.query.all()
+
+    return render_template('admin/dashboard.html', posts=posts, form=form, categories=categories)
+
+
+@app.route('/admin/categories', methods=['GET', 'POST'])
+@login_required
+def admin_categories():
+    if not current_user.is_admin:
+        abort(403)
+
+    form = CategoryForm()
+    if form.validate_on_submit():
+        category = Category(name=form.name.data, slug=slugify(form.name.data))
+        db.session.add(category)
+        db.session.commit()
+        flash('Category created successfully!', 'success')
+        return redirect(url_for('admin_categories'))
+
+    categories = Category.query.all()
+    posts = Post.query.all()
+    return render_template('admin/dashboard.html', categories=categories, form=form, posts=posts)
+
+
+
+
+@app.route('/admin/category/new', methods=['GET', 'POST'])
+@login_required
+def new_category():
+    if not current_user.is_admin:
+        abort(403)
+
+    form = CategoryForm()
+
+    # Debugging: Log the form data and validation status
+    app.logger.debug(f'Form data: {form.data}')
+    app.logger.debug(f'Form validation: {form.validate_on_submit()}')
+
+    if form.validate_on_submit():
+        app.logger.debug('Form is validated.')
+
+        # Create the new category
+        category = Category(name=form.name.data, slug=slugify(form.name.data))
+        db.session.add(category)
+        db.session.commit()
+
+        app.logger.debug('Category created successfully')
+        flash('Category created successfully!', 'success')
+        return redirect(url_for('admin_categories'))
+
+    app.logger.debug('Form validation failed or GET request')
+    return render_template('admin/new_category.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password.', 'danger')
+    return render_template('login.html', form=form)
+
+@app.route('/admin/category/edit/<int:category_id>', methods=['GET', 'POST'])
+@login_required
+def edit_category(category_id):
+    if not current_user.is_admin:
+        abort(403)
+
+    category = Category.query.get_or_404(category_id)
+    form = CategoryForm(obj=category)
+
+    if form.validate_on_submit():
+        category.name = form.name.data
+        category.slug = slugify(form.name.data)
+        db.session.commit()
+        flash('Category updated successfully!', 'success')
+        return redirect(url_for('admin_categories'))
+
+    return render_template('admin/edit_category.html', form=form, category=category)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':

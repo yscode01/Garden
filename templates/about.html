@@ -1,52 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>About</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">HOME</a></li>
-                <li><a href="{{ url_for('blog') }}">BLOG</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('search') }}">SEARCH</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <h1>About This Gardening Blog</h1>
+{% block title %}About - Gardening Blog{% endblock %}
 
-        <div class="about-section">
-            <img src="{{ url_for('static', filename='images/garden.jpg') }}" alt="Garden Image">
-            <p>Welcome to my gardening blog!</p>
-        </div>
-
-        <div class="about-section">
-            <h2>Mission</h2>
-            <p>My mission is to provide valuable gardening information, practical tips, and inspiration to nurture a thriving garden.</p>
-        </div>
-
-        <div class="about-section">
-            <h2>What You'll Find</h2>
-            <p>On this blog, you'll discover a wealth of resources, including:</p>
-            <ul>
-                <li>Step-by-step guides for growing various plants, from vegetables and fruits to flowers and herbs</li>
-                <li>Advice on garden design, soil preparation, and pest control</li>
-                <li>Seasonal gardening tips and ideas for different climate zones</li>
-                <li>Product reviews and recommendations for gardening tools and supplies</li>
-                <li>Inspiring stories and experiences from fellow gardeners</li>
-            </ul>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
-    </footer>
-
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-</body>
-</html>
+{% block content %}
+<h1>About</h1>
+<p>Welcome to the Gardening Blog. Here I share tips, tricks, and stories about gardening. Join me on a journey of creating beautiful gardens.</p>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{% if post %}Edit{% else %}New{% endif %} Post{% endblock %}
+
+{% block content %}
+<h1>{% if post %}Edit{% else %}Create New{% endif %} Post</h1>
+<form method="post">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.title.label }} {{ form.title(size=50) }}
+    {% if form.title.errors %}
+      <ul>{% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+  <div>
+    {{ form.slug.label }} {{ form.slug(size=50) }}
+  </div>
+  <div>
+    {{ form.category.label }} {{ form.category }}
+  </div>
+  <div>
+    {{ form.tags.label }} {{ form.tags(size=50, placeholder="garden,plants,tips") }}
+  </div>
+  <div>
+    {{ form.featured_image.label }} {{ form.featured_image(size=50) }}
+  </div>
+  <div>
+    {{ form.status.label }} {{ form.status }}
+  </div>
+  <div>
+    {{ form.content.label }}<br>{{ form.content(rows=10, cols=80) }}
+  </div>
+  {{ form.submit(class="btn") }}
+</form>
+{% endblock %}

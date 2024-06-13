@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}New Category{% endblock %}
+
+{% block content %}
+<h1>Create New Category</h1>
+<form method="post">
+  {{ form.csrf_token }}
+  <div>
+    {{ form.name.label }} {{ form.name(size=50) }}
+    {% if form.name.errors %}
+      <ul>{% for error in form.name.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+  {{ form.submit(class="btn") }}
+</form>
+<a href="{{ url_for('admin_categories') }}">Back to Categories</a>
+{% endblock %}

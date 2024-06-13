@@ -158,3 +158,67 @@ h1 {
 p {
   font-family: 'TT', sans-serif;
 }
+
+/* Link Styles */
+a:link {
+  color: #6b9c51;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #507a3e;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #8fc769;
+  text-decoration: none;
+}
+
+a:active {
+  color: #3d5b2c;
+  text-decoration: none;
+}
+
+/* SVG */
+.svg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.twirl-svg {
+  width: 300px;
+  animation: twirl 5s linear infinite, colorChange 10s linear infinite;
+}
+
+@keyframes twirl {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+@keyframes colorChange {
+  0% {
+      filter: hue-rotate(0deg);
+  }
+  20% {
+      filter: hue-rotate(72deg);
+  }
+  40% {
+      filter: hue-rotate(144deg);
+  }
+  60% {
+      filter: hue-rotate(216deg);
+  }
+  80% {
+      filter: hue-rotate(288deg);
+  }
+  100% {
+      filter: hue-rotate(360deg);
+  }
+}

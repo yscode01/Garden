@@ -1,50 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search Posts</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('home') }}">HOME</a></li>
-                <li><a href="{{ url_for('blog') }}">BLOG</a></li>
-                <li><a href="{{ url_for('about') }}">ABOUT</a></li>
-                <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-                <li><a href="{{ url_for('search') }}">SEARCH</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        <h1>Search Posts</h1>
-        <form method="POST" action="{{ url_for('search') }}">
-            {{ form.hidden_tag() }}
-            <div>
-                {{ form.keywords.label }}<br>
-                {{ form.keywords(size=50) }}
-            </div>
-            <div>
-                {{ form.category.label }}<br>
-                {{ form.category(size=50) }}
-            </div>
-            <div>
-                {{ form.author.label }}<br>
-                {{ form.author(size=50) }}
-            </div>
-            <div>
-                {{ form.tags.label }}<br>
-                {{ form.tags(size=50) }}
-            </div>
-            <div>
-                {{ form.submit() }}
-            </div>
-        </form>
-    </main>
+{% block title %}Search - Gardening Blog{% endblock %}
 
-    <footer>
-        <p>&copy; 2024 Gardening Blog. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+{% block content %}
+<h1>Search</h1>
+<form method="POST" action="{{ url_for('search') }}">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.keywords.label }}<br>
+        {{ form.keywords(size=32) }}<br>
+        {% for error in form.keywords.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
