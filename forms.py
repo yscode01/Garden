@@ -11,6 +11,7 @@ class LoginForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
+    slug = StringField('Slug')
     content = CKEditorField('Content', validators=[DataRequired()])
     category = SelectField('Category', coerce=int, validators=[DataRequired()])
     tags = StringField('Tags (comma-separated)')

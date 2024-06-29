@@ -113,13 +113,28 @@ def edit_post(post_id):
         abort(403)
     post = Post.query.get_or_404(post_id)
     form = PostForm(obj=post)
+
     if form.validate_on_submit():
-        form.populate_obj(post)
-        post.slug = slugify(post.title)
+        post.title = form.title.data
+        post.content = form.content.data
+        post.featured_image = form.featured_image.data
+        post.status = form.status.data
+
+        post.slug = slugify(form.title.data)
+
+        category = Category.query.get(form.category.data)
+        if category:
+            post.category = category
+
+        tag_names = [tag.strip() for tag in form.tags.data.split(',') if tag.strip()]
+        post.tags = ','.join(tag_names)
+
         db.session.commit()
         flash('Post updated successfully!', 'success')
         return redirect(url_for('post', post_slug=post.slug))
+
     return render_template('admin/edit_post.html', form=form, post=post)
+
 
 @app.route('/blog/delete/<int:post_id>', methods=['POST'])
 @login_required
